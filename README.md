@@ -1,7 +1,7 @@
 # Flutter Mono
 `** This is an unofficial SDK for flutter`
 
-This package make it easy to use the Mono connect widget in a flutter project.
+This package makes it easy to use the Mono connect widget in a flutter project.
 
 ## 📸 Screen Shots
 
