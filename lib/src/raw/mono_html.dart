@@ -9,11 +9,11 @@ String buildMonoHtml(
   WidgetType type = WidgetType.connect,
   String currency = "NGN",
   String description = "MONO_FLUTTER_PAYMENT",
+  double amount = 1000,
   String reference = "MONO_PAYMENT_REFERENCE",
   String planId = "MONO_SUBSCRIPTION",
   String period = "monthly",
   String duration = "10",
-  double amount = 1000,
 }) =>
     type == WidgetType.connect
         ? monoConnect(key)
@@ -26,8 +26,8 @@ String buildMonoHtml(
             : recurringPayment(key,
                 currency: currency,
                 description: description,
+                amount: amount,
                 reference: reference,
                 planId: planId,
                 period: period,
-                duration: duration,
-                amount: amount);
+                duration: duration,);

@@ -33,10 +33,10 @@ class MonoView extends StatefulWidget {
   final WidgetType type;
 
   /// CURRENCY
-  final String currency = "NGN";
+  final String currency;
 
   /// DESCRIPTION
-  final String description = "MONO_FLUTTER_PAYMENT";
+  final String description;
 
   /// AMOUNT IN KOBO
   final double amount;
@@ -62,6 +62,8 @@ class MonoView extends StatefulWidget {
     this.type = WidgetType.connect,
     this.showLogs = false,
     this.amount = 1000,
+    this.currency = "NGN",
+    this.description = "MONO_FLUTTER_PAYMENT",
     this.reference = "MONO_PAYMENT_REFERENCE",
     this.planId = "MONO_SUBSCRIPTION",
     this.period = "monthly",
