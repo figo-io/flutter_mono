@@ -11,6 +11,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../raw/mono_html.dart';
 import 'error_view.dart';
 
+enum WidgetType { once, recurring, connect }
+
 class MonoView extends StatefulWidget {
   /// Public Key from your https://app.withmono.com/apps
   final String? apiKey;
@@ -27,13 +29,43 @@ class MonoView extends StatefulWidget {
   /// Show MonoView Logs
   final bool showLogs;
 
-  const MonoView( {
+  /// select widget to display
+  final WidgetType type;
+
+  /// CURRENCY
+  final String currency = "NGN";
+
+  /// DESCRIPTION
+  final String description = "MONO_FLUTTER_PAYMENT";
+
+  /// AMOUNT IN KOBO
+  final double amount;
+
+  /// REFERENCE
+  final String reference;
+
+  /// PLAN ID FOR RECURRING PAYMENT
+  final String planId;
+
+  /// PERIOD FOR RECURRING PAYMENT (WEEKLY, MONTHLY, DAILY OR YEARLY)
+  final String period;
+
+  /// DURATION FOR RECURRING PAYMENT (NUMBER OF TIMES RECURRING SHOULD GO FOR)
+  final String duration;
+
+  const MonoView({
     Key? key,
     required this.apiKey,
     this.error,
     this.onSuccess,
     this.onClosed,
+    this.type = WidgetType.connect,
     this.showLogs = false,
+    this.amount = 1000,
+    this.reference = "MONO_PAYMENT_REFERENCE",
+    this.planId = "MONO_SUBSCRIPTION",
+    this.period = "monthly",
+    this.duration = "10",
   })  : assert(apiKey != null, 'API key cannot be null'),
         super(key: key);
 
@@ -77,7 +109,6 @@ class _MonoViewState extends State<MonoView> {
                           AsyncSnapshot<WebViewController> controller) {
                         return WebView(
                           initialUrl: snapshot.data!,
-                          
                           onWebViewCreated:
                               (WebViewController webViewController) {
                             _controller.complete(webViewController);
@@ -148,7 +179,16 @@ class _MonoViewState extends State<MonoView> {
         setState(() {
           hasError = false;
         });
-        return Uri.dataFromString(buildMonoHtml(widget.apiKey),
+        return Uri.dataFromString(
+                buildMonoHtml(widget.apiKey,
+                    type: widget.type,
+                    currency: widget.currency,
+                    description: widget.description,
+                    amount: widget.amount,
+                    reference: widget.reference,
+                    planId: widget.planId,
+                    period: widget.period,
+                    duration: widget.duration),
                 mimeType: 'text/html')
             .toString();
       } else {

@@ -1,38 +1,33 @@
+import '../views/mono_web_view.dart';
+import 'html_widgets/connect_widget.dart';
+import 'html_widgets/one_time_payment.dart';
+import 'html_widgets/recurring_payment.dart';
+
 /// Raw mono html formation
-String buildMonoHtml(String? key) => '''
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mono Connect</title>
-</head>
-
-<body onload="setupMonoConnect()" style="border-radius: 20px; background-color:#fff;height:100vh;overflow: hidden; ">
-    <script src="https://connect.withmono.com/connect.js"></script>
-    <script type="text/javascript">
-        window.onload = setupMonoConnect;
-        function setupMonoConnect() {
-            var connect;
-            var config = {
-                key: "$key",
-                onSuccess: function (data) {
-                    const response = { "type": "mono.modal.linked", response: { ...data } }
-                    MonoClientInterface.postMessage(JSON.stringify(response))
-                },
-                onClose: function () {
-                    const response = { type: 'mono.modal.closed', }
-                    MonoClientInterface.postMessage(JSON.stringify(response))
-                }
-            };
-            connect = new Connect(config)
-            connect.setup()
-            connect.open()
-        }
-    </script>
-</body>
-
-</html>
-''';
+String buildMonoHtml(
+  String? key, {
+  WidgetType type = WidgetType.connect,
+  String currency = "NGN",
+  String description = "MONO_FLUTTER_PAYMENT",
+  String reference = "MONO_PAYMENT_REFERENCE",
+  String planId = "MONO_SUBSCRIPTION",
+  String period = "monthly",
+  String duration = "10",
+  double amount = 1000,
+}) =>
+    type == WidgetType.connect
+        ? monoConnect(key)
+        : WidgetType.once == type
+            ? oneTimePayment(key,
+                currency: currency,
+                description: description,
+                amount: amount,
+                reference: reference)
+            : recurringPayment(key,
+                currency: currency,
+                description: description,
+                reference: reference,
+                planId: planId,
+                period: period,
+                duration: duration,
+                amount: amount);
